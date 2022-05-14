@@ -21,6 +21,7 @@ public class ActualLang {
         }
     }
 
+    /** reads & runs the file (details of running in the run method) */
     private static void runFile(String path) throws IOException {
         BufferedReader read = new BufferedReader(new FileReader(path));
         // the entire file in a single stringbuilder
@@ -36,6 +37,7 @@ public class ActualLang {
         }
     }
 
+    /** parses & interprets the code, also does the handling i guess */
     private static void run(String code) {
         Tokenizer sc = new Tokenizer(code);
         List<Token> tokens = sc.scanTokens();
