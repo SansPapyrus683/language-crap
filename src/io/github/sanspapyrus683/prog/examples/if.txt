@@ -1,0 +1,8 @@
+var a = 4;
+var b = 2;
+var c = 8;
+if (a + b == c) {
+    print "hooray!";
+} else {
+    print "bruh";
+}
