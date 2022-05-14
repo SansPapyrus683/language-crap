@@ -15,7 +15,7 @@ public class Parser {
     private static class ParseError extends RuntimeException { }
 
     private final List<Token> tokens;
-    private int at = 0;  // the current toekn we're at
+    private int at = 0;  /** the current token we're at */
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -132,12 +132,12 @@ public class Parser {
     //endregion
 
     //region EXPRESSION parsing
-    // *basically* everything except the base literals
+    /** *basically* everything except the base literals */
     private Expr expression() {
         return assignment();
     }
 
-    // more REassignment than actual assignment (a = 1, not var a = 1)
+    /** more REassignment than actual assignment (a = 1, not var a = 1) */
     private Expr assignment() {
         Expr expr = or();
         if (match(TokenType.EQUAL)) {
@@ -151,7 +151,7 @@ public class Parser {
         return expr;
     }
 
-    // parses the || token (lower priority than and)
+    /** parses the || token (lower priority than and) */
     private Expr or() {
         Expr curr = and();
         if (match(TokenType.OR)) {
@@ -161,7 +161,7 @@ public class Parser {
         return curr;
     }
 
-    // parses the && stuff
+    /** parses the && stuff */
     private Expr and() {
         Expr curr = equality();
         if (match(TokenType.AND)) {
@@ -171,7 +171,7 @@ public class Parser {
         return curr;
     }
 
-    // == or !=, that's it
+    /** == or !=, that's it */
     private Expr equality() {
         Expr curr = comparison();  // consume the left side tokens
         while (match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
@@ -182,7 +182,7 @@ public class Parser {
         return curr;
     }
 
-    // <=, <, you know all that stuff
+    /** <=, <, you know all that stuff */
     private Expr comparison() {
         Expr curr = term();
         while (match(TokenType.LESS, TokenType.LESS_EQUAL,
@@ -194,7 +194,7 @@ public class Parser {
         return curr;
     }
 
-    // addition/subtraction stuff
+    /** addition/subtraction stuff */
     private Expr term() {
         Expr curr = factor();
         while (match(TokenType.PLUS, TokenType.MINUS)) {
@@ -205,7 +205,7 @@ public class Parser {
         return curr;
     }
 
-    // multiplication, division, & modulus
+    /** multiplication, division, & modulus */
     private Expr factor() {
         Expr curr = unary();
         while (match(TokenType.STAR, TokenType.SLASH, TokenType.MOD)) {
@@ -216,7 +216,7 @@ public class Parser {
         return curr;
     }
 
-    // like !bool or -bruh
+    /** like !bool or -bruh */
     private Expr unary() {
         if (match(TokenType.BANG, TokenType.MINUS)) {
             Token op = prev();
@@ -226,7 +226,7 @@ public class Parser {
         return primary();
     }
 
-    // basically everything else (this is also where the recursion happens)
+    /** parses basically everything else (this is also where the recursion happens) */
     private Expr primary() {
         if (match(TokenType.FALSE)) {
             return new Expr.Literal(false);
@@ -238,7 +238,7 @@ public class Parser {
             return new Expr.Literal(prev().literal);
         } else if (match(TokenType.LEFT_PAREN)) {
             Expr expr = expression();
-            consume(TokenType.RIGHT_PAREN, "you need to complete your parentheses you moron");
+            consume(TokenType.RIGHT_PAREN, "you need to complete your parentheses bruh");
             return new Expr.Grouping(expr);
         } else if (match(TokenType.IDENTIFIER)) {
             return new Expr.Var(prev());
@@ -247,7 +247,7 @@ public class Parser {
     }
     //endregion
 
-    // checks if the current token is of the given type (errors if it doesn't lol)
+    /** checks if the current token is of the given type (errors if it doesn't lol) */
     private Token consume(TokenType type, String msg) {
         if (peek().type == type) {
             return advance();

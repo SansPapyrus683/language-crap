@@ -48,7 +48,7 @@ public class ActualLang {
         new Interpreter().interpret(expr);
     }
 
-    // report an error at a line in general or at a specific token
+    /** report an error at a line in general or at a specific token */
     public static void error(int line, String msg) {
         report(line, "", msg);
     }

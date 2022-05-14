@@ -166,6 +166,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>  {
     }
     //endregion
 
+    /** checks if toCheck is a Double object- if it isn't, throws an error */
     private void checkNum(Token operand, Object toCheck) {
         if (toCheck instanceof Double) {
             return;
@@ -173,6 +174,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>  {
         throw new RuntimeError(operand, "operand must be a number");
     }
 
+    /** does the same thing except for two numbers */
     private void checkBothNums(Token operand, Object left, Object right) {
         if (!(left instanceof Double && right instanceof Double)) {
             throw new RuntimeError(operand, "operands must both be numbers");

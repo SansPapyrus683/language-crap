@@ -5,6 +5,10 @@ import io.github.sanspapyrus683.prog.errors.RuntimeError;
 
 import java.util.HashMap;
 
+/**
+ * the class that contains the variables of the interpreter
+ * at its core, it's just a glorified hashmap lol
+ */
 public class Environment {
     private final HashMap<String, Object> vars = new HashMap<>();
     public void define(Token var, Object val) {

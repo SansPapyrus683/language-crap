@@ -21,9 +21,9 @@ public class Tokenizer {
 
     private final String src;
     private final List<Token> tokens = new ArrayList<>();
-    private int prev = 0;  // where we left off
-    private int at = 0;  // the current character we're at
-    private int line = 1;  // current line number
+    private int prev = 0;  /** where we left off */
+    private int at = 0;  /** the current character we're at */
+    private int line = 1;  /** current line number */
 
     public Tokenizer(String src) {
         this.src = src;
@@ -129,7 +129,7 @@ public class Tokenizer {
     }
 
     //region checks & gets the characters or whatever
-    // returns the current character & advances the pointer
+    /** returns the current character & advances the pointer */
     private char advance() {
         return src.charAt(at++);
     }

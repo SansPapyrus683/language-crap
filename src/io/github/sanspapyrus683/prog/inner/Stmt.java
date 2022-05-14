@@ -4,6 +4,11 @@ import io.github.sanspapyrus683.prog.Token;
 
 import java.util.List;
 
+/**
+ * statements are the things that actually DO stuff
+ * like print statements, if statements, all that good stuff
+ * they're handled the by interpreter
+ */
 public abstract class Stmt {
     public interface Visitor<T> {
         T visitBlock(Block stmt);
