@@ -7,11 +7,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * you give this thing some tokens
+ * it gives you an AST in return
+ */
 public class Parser {
     private static class ParseError extends RuntimeException { }
 
     private final List<Token> tokens;
-    private int at = 0;
+    private int at = 0;  // the current toekn we're at
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
@@ -26,7 +30,6 @@ public class Parser {
     }
 
     //region STATEMENT parsing
-
     private Stmt statement() {
         if (match(TokenType.PRINT)) {
             return printStatement();
@@ -134,6 +137,7 @@ public class Parser {
         return assignment();
     }
 
+    // more REassignment than actual assignment (a = 1, not var a = 1)
     private Expr assignment() {
         Expr expr = or();
         if (match(TokenType.EQUAL)) {
@@ -142,11 +146,12 @@ public class Parser {
                 Expr val = or();
                 return new Expr.Assignment(((Expr.Var) expr).name, val);
             }
-            error(equals, "bruh you have to assign to a variable");
+            throw error(equals, "bruh you have to assign to a variable");
         }
         return expr;
     }
 
+    // parses the || token (lower priority than and)
     private Expr or() {
         Expr curr = and();
         if (match(TokenType.OR)) {
@@ -156,6 +161,7 @@ public class Parser {
         return curr;
     }
 
+    // parses the && stuff
     private Expr and() {
         Expr curr = equality();
         if (match(TokenType.AND)) {
@@ -220,7 +226,7 @@ public class Parser {
         return primary();
     }
 
-    // literally everything including the base literals
+    // basically everything else (this is also where the recursion happens)
     private Expr primary() {
         if (match(TokenType.FALSE)) {
             return new Expr.Literal(false);
@@ -241,25 +247,7 @@ public class Parser {
     }
     //endregion
 
-    private void reset() {
-        advance();
-        while (peek().type != TokenType.EOF) {
-            if (prev().type == TokenType.SEMICOLON) {
-                return;
-            }
-            TokenType[] canBreak = new TokenType[] {
-                TokenType.VAR, TokenType.FOR, TokenType.IF,
-                    TokenType.WHILE, TokenType.PRINT
-            };
-            for (TokenType tt : canBreak) {
-                if (prev().type == tt) {
-                    return;
-                }
-            }
-            advance();
-        }
-    }
-
+    // checks if the current token is of the given type (errors if it doesn't lol)
     private Token consume(TokenType type, String msg) {
         if (peek().type == type) {
             return advance();

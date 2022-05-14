@@ -8,7 +8,7 @@ import io.github.sanspapyrus683.prog.TokenType;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>  {
-    private Environment environment = new Environment();
+    private final Environment environment = new Environment();
 
     public void interpret(List<Stmt> statements) {
         try {

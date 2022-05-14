@@ -23,8 +23,10 @@ public class ActualLang {
 
     private static void runFile(String path) throws IOException {
         BufferedReader read = new BufferedReader(new FileReader(path));
+        // the entire file in a single stringbuilder
         StringBuilder res = new StringBuilder();
         String line;
+        // read all the lines from the file
         while ((line = read.readLine()) != null) {
             res.append(line).append('\n');
         }
@@ -38,13 +40,15 @@ public class ActualLang {
         Tokenizer sc = new Tokenizer(code);
         List<Token> tokens = sc.scanTokens();
         Parser parser = new Parser(tokens);
+        List<Stmt> expr = parser.parse();
+        // don't even try to execute the code if there was a parse error
         if (errored) {
             return;
         }
-        List<Stmt> expr = parser.parse();
         new Interpreter().interpret(expr);
     }
 
+    // report an error at a line in general or at a specific token
     public static void error(int line, String msg) {
         report(line, "", msg);
     }

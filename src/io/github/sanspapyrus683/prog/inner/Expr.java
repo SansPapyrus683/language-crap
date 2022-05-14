@@ -100,7 +100,7 @@ public abstract class Expr {
     }
 
     public static class Var extends Expr {
-        public Token name;
+        public final Token name;
         public Var(Token name) {
             this.name = name;
         }

@@ -21,9 +21,9 @@ public class Tokenizer {
 
     private final String src;
     private final List<Token> tokens = new ArrayList<>();
-    private int prev = 0;
-    private int at = 0;
-    private int line = 1;
+    private int prev = 0;  // where we left off
+    private int at = 0;  // the current character we're at
+    private int line = 1;  // current line number
 
     public Tokenizer(String src) {
         this.src = src;
@@ -52,6 +52,7 @@ public class Tokenizer {
             case '%': addToken(TokenType.MOD); break;
             case ';': addToken(TokenType.SEMICOLON); break;
             case '*': addToken(TokenType.STAR); break;
+            // for some two-char tokens, look ahead to see which one it is
             case '!':  addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG); break;
             case '=': addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL); break;
             case '>': addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER); break;
@@ -100,7 +101,9 @@ public class Tokenizer {
     }
 
     private void handleNumber() {
-        for (; Character.isDigit(peek()); advance()) ;
+        // advance through all the initial digits
+        for (; Character.isDigit(peek()); advance());
+        // handle a decimal if there is one (btw numbers like 69. aren't allowed)
         if (peek() == '.' && Character.isDigit(peekNext())) {
             advance();
             for (; Character.isDigit(peek()); advance()) ;
@@ -110,11 +113,13 @@ public class Tokenizer {
 
     private void handleIdentifier() {
         for (; isAlphanumeric(peek()); advance());
+        // change the token type if the word is something like if or for
         TokenType type = keywords.getOrDefault(src.substring(prev, at), TokenType.IDENTIFIER);
         addToken(type);
     }
     //endregion
 
+    // yeah yeah underscores aren't alphabetic, sue me.
     private boolean isAlpha(char c) {
         return Character.isAlphabetic(c) || c == '_';
     }
@@ -124,14 +129,17 @@ public class Tokenizer {
     }
 
     //region checks & gets the characters or whatever
+    // returns the current character & advances the pointer
     private char advance() {
         return src.charAt(at++);
     }
 
     private boolean match(char c) {
-        if (isAtEnd() || src.charAt(at) != c) {
+        // if the current character doesn't match, do nothing
+        if (isAtEnd() || peek() != c) {
             return false;
         }
+        // if it does, move the pointer forward & return true
         at++;
         return true;
     }

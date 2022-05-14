@@ -1,5 +1,9 @@
 package io.github.sanspapyrus683.prog.inner;
 
+/**
+ * just a debugging class, not actually used in the problem
+ * but yeah this prints out an AST in a somewhat human readable format
+ */
 public class ASTPrinter implements Expr.Visitor<String> {
     public String exprString(Expr expr) {
         return expr.accept(this);
@@ -40,6 +44,7 @@ public class ASTPrinter implements Expr.Visitor<String> {
         return parenthesize("var", expr);
     }
 
+    // prints out a node of the AST
     private String parenthesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
 

@@ -17,7 +17,7 @@ public abstract class Stmt {
     public abstract <T> T accept(Visitor<T> visitor);
 
     public static class Block extends Stmt {
-        public List<Stmt> content;
+        public final List<Stmt> content;
         public Block(List<Stmt> content) {
             this.content = content;
         }
@@ -69,8 +69,8 @@ public abstract class Stmt {
     }
 
     public static class Var extends Stmt {
-        Token name;
-        Expr init;
+        public final Token name;
+        public final Expr init;
         public Var(Token name, Expr init) {
             this.name = name;
             this.init = init;
