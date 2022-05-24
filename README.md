@@ -59,6 +59,7 @@ as java except you use `and` and `or` instead of `&&` and `||`
 for (var i = 0; i < 10; i = i + 1) {
     print i;
 }
+print i;  // the variable is preserved
 ```
 basically the same as java loops except there's no shorthand increment operator  
 you have your initial statement, your looping condition, & the post-loop
